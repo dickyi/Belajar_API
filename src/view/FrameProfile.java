@@ -1,11 +1,5 @@
 package view;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.net.URL;
-import java.util.Base64;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import org.json.*;
 import kelas.Mahasiswa;
@@ -17,7 +11,7 @@ public class FrameProfile extends javax.swing.JFrame {
         loadProfile();
     }
 
-    void loadProfile() {
+  /*  void loadProfile() {
         tFoto.setIcon(null);
         JSONArray data = Mahasiswa.getDatamhs();
         for (int i = 0; i < data.length(); i++) {
@@ -63,7 +57,34 @@ public class FrameProfile extends javax.swing.JFrame {
             }
 
         }
+    }*/
+               
+    
+   public void loadProfile() {
+        JSONArray data = Mahasiswa.getDatamhs();
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject item = data.getJSONObject(i);
+            if (i == Mahasiswa.getBaris()) {
+                tNim.setText(item.getString("mhs_nim"));
+                tNama.setText(item.getString("mhs_nama"));
+                tJK.setText(item.getString("mhs_jk"));
+                tTTL.setText(item.getString("mhs_tempatlahir") + ", " + item.getString("mhs_tanggallahir"));
+                tEmail.setText(item.getString("mhs_email"));
+                tNoHP.setText(item.getString("mhs_hp"));
+
+                if (item.has("mhs_foto") && !item.isNull("mhs_foto")) {
+                    ImageIcon image = Mahasiswa.decodeBase64ToImage(item.getString("mhs_foto"), tFoto.getWidth(), tFoto.getHeight());
+                    tFoto.setIcon(image);
+                    tFoto.setText(null); 
+                } else {
+                    tFoto.setText("Foto tidak tersedia");
+                    tFoto.setIcon(null);
+                }
+            }
+        }
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
